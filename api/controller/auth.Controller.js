@@ -40,15 +40,16 @@ export const google = async (req, res, next) => {
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRETE);
       const { password: hashedPassword, ...rest } = user._doc;
-      // const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
       res
         .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
         .status(200)
         .json(rest);
     } else {
       // generate random passwords with 16 digits
-      const generatedPassword = Math.random().toString(36).slice(-8);
-      // Math.random().toString(36).slice(-8);
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       /**Create a random credentials with
        * username to lowercase with
