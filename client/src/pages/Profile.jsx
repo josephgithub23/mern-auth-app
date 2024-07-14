@@ -12,6 +12,9 @@ import {
   updateUserStart,
   updateUserFailure,
   updateUserSuccess,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux/user/user.slice";
 
 export default function Profile() {
@@ -95,6 +98,28 @@ export default function Profile() {
       dispatch(updateUserFailure(error));
     }
   };
+  /***
+   * Here since all users are store in our redux tool kit,
+   * we need to add/ manage the delete from redux as well.
+   */
+  const handleDeleteAccount = async () => {
+    dispatch(deleteUserStart());
+    try {
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
+  console.log(error);
 
   return (
     <div className="p-3 mx-auto max-w-lg ">
@@ -109,7 +134,7 @@ export default function Profile() {
           onChange={(e) => setImage(e.target.files[0])}
         />
         {/* 
-        Firebase storage rules:
+      Firebase storage rules:
       allow read;
       allow write: if
       request.resource.size < 2 * 1024 * 1024 &&
@@ -161,7 +186,10 @@ export default function Profile() {
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-500 cursor-pointer hover:opacity-95">
+        <span
+          onClick={handleDeleteAccount}
+          className="text-red-500 cursor-pointer hover:opacity-95"
+        >
           Delete Account
         </span>
         <span className="text-red-500 cursor-pointer hover:opacity-95">
