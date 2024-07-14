@@ -3,6 +3,8 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
+// SignUp Auth Router
+
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -14,6 +16,8 @@ export const signup = async (req, res, next) => {
     next(error);
   }
 };
+
+// SignIp Auth Router
 
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -33,6 +37,8 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+// Google Auth Router
 
 export const google = async (req, res, next) => {
   try {
@@ -74,6 +80,12 @@ export const google = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+// SignOut Auth Router
+
+export const signout = (req, res) => {
+  res.clearCookie("access_token").status(200).json("Sign out success!");
 };
 
 export default signup;
