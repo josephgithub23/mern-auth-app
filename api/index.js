@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config();
@@ -16,7 +17,7 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
-
+app.use(cookieParser());
 app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
