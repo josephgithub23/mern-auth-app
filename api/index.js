@@ -5,8 +5,27 @@ import cors from "cors";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
+import path from "path";
 
+const __dirname = path.resolve();
 const app = express();
+
+/**8
+ * Defining the static path
+ */
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+/***
+ * So here whenever we get to any req from the seaver it goes inside the path inside the client file and the dist , to the the root file index.html and send to the client
+ */
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
+
+/***
+ * Use path method to resolve the directory name. this helps to find the directory in any server.
+ */
+
 dotenv.config();
 app.use(cors());
 mongoose
